@@ -1,9 +1,7 @@
 from Model.Equipo import Equipo
 from Model.Estudiante import Estudiante
+import datetime
 
-e=Equipo('william', '', '', '', '', '')
-e.save()
-e.verDatos()
+hoy=datetime.date.today().strftime("%d/%m/%y")
 
-b=Estudiante
-a=Estudiante.crearNuevoPrestamo()
+print(hoy)

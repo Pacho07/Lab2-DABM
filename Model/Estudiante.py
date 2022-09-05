@@ -1,5 +1,5 @@
 from Model.Equipo import Equipo
-
+import datetime
 
 class Estudiante:
 
@@ -23,10 +23,16 @@ class Estudiante:
         print('REGISTRAR NUEVO ESTUDIANTES')
         nombre=input('nombre: ')
         carnet=input('carnet: ')
-        prestamo=input('fecha prestamo: ')
-        entregaPrestamo=input('fecha entrega prestamo: ')
-        equipo=Equipo.consulta('william',input('nombre del equipo'))
-        equipo=equipo
+        prestamo=int(input('fecha prestamo de forma (%d/%m/%y) :  '))
+        entregaPrestamo=int(input('fecha entrega prestamo de forma (%d/%m/%y) :  '))
+        equipo=Equipo.consulta(input('serial del equipo que desea prestar: '))
+        equipo=''.join(equipo)
+        equipo=equipo.split(';')
+        equipo=':'.join(equipo)
+
+        prestamo = datetime.datetime.today()
+        entregaPrestamo = datetime.datetime.strptime(entregaPrestamo, "%d/%m/%y")
+
         e = Estudiante(nombre,carnet,prestamo,entregaPrestamo,equipo)
         e.save()
 
