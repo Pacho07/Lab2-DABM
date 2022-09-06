@@ -4,7 +4,7 @@ import datetime
 
 class Equipo:
 
-    def __init__(self, nombre, referencia, proveedor, cicloMante, ultMante, cantidad,diaMante):
+    def __init__(self, nombre, referencia, proveedor, cicloMante, ultMante, cantidad):
 
         self.nombre = nombre
         self.referencia = referencia
@@ -12,6 +12,7 @@ class Equipo:
         self.cicloMante = cicloMante
         self.ultMante = ultMante
         self.cantidad = cantidad
+
 
 
     @staticmethod
@@ -126,13 +127,8 @@ class Equipo:
         ultimoMan = datetime.datetime.strptime(ultimoMan, "%d/%m/%y")
 
 
-
-
-
         e = Equipo(nombre, proveedor, referencia, cicloMan, ultimoMan, cantidad)
         e.save()
 
         return e
 
-
-Equipo.verDatosTodos()
