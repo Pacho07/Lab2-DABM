@@ -1,5 +1,6 @@
 from Model.Equipo import Equipo
 import datetime
+from tabulate import tabulate
 
 class Estudiante:
 
@@ -17,11 +18,31 @@ class Estudiante:
         archivo.write(linea + '\n')
         archivo.close()
 
-        archivo = open('BaseDatos/Estudiantes.txt', 'a')
+        #aquí quitamos el numero de disponibilidad
 
-        archivo.write(';'.join(self.equipo,self.nombre) + '\n')
+        archivo = open("../BaseDatos/Equipos.txt", 'r')
+        mantenimiento = archivo.readlines()
+        mantenimiento = ''.join(x for x in mantenimiento if x not in '\n')
+        mantenimiento = mantenimiento.split('\n')
+
+        arreglado = []
+
+        for i in mantenimiento:
+            iterator = i.split(';')
+
+
+            if iterator[1] == self.equipo:
+                iterator[5] = int(iterator[5]) - 1
+                iterator[6] = int(iterator[6]) + 1
+                arreglado.append(';'.join(iterator))
+            else:
+                arreglado.append(';'.join(iterator))
 
         archivo.close()
+
+        archivo = open("../BaseDatos/Equipos.txt", 'w')
+
+        archivo.write('\n'.join(arreglado))
 
 
 
@@ -29,28 +50,64 @@ class Estudiante:
 
 
     @staticmethod
-    def crearNuevoPrestamo():
+    def consulPrestamo():
+        archivo = open("BaseDatos/Estudiantes.txt", 'r')
+        mantenimiento = archivo.readlines()
+        mantenimiento = ''.join(x for x in mantenimiento if x not in '\n')
+        mantenimiento = mantenimiento.split('\n')
 
-        print('REGISTRAR NUEVO ESTUDIANTES')
-        nombre=input('nombre: ')
-        carnet=input('carnet: ')
-        entregaPrestamo=input('fecha entrega prestamo de forma (%d/%m/%y) :  ')
-        entregaPrestamo = datetime.datetime.strptime(entregaPrestamo, "%d/%m/%y")
+        arreglado = []
 
-        equipo=Equipo.consulta(input('identificador del equipo que desea prestar: '))
-        equipo=''.join(equipo)
-        equipo=equipo.split(';')
-        equipo=':'.join(equipo)
+        for i in mantenimiento:
+            iterator = i.split(';')
+            if int(iterator[6])> 0:
 
-        prestamo = datetime.datetime.today().strptime('%d/%m/%y')
+                arreglado.append(iterator)
 
-        entregaPrestamo = datetime.datetime.strptime(entregaPrestamo, "%d/%m/%y")
+        archivo.close()
+
+        print('''
+
+
+                EQUIPOS QUE ESTAN PRESTADOS
+
+
+                ''')
+
+
+
+        header = ['nombre', 'referencia', 'proveedor', 'ciclo mantenimiento (dias)', 'ultimo mantenimiento', 'cantidad','cantidad prestada']
+        print(tabulate(arreglado, header, tablefmt="grid"))
+
+        archivo.close()
+
+
+def crearNuevoPrestamo():
+
+    print('REGISTRAR NUEVO ESTUDIANTES')
+    nombre=input('nombre: ')
+    carnet=input('carnet: ')
+    entregaPrestamo=input('fecha entrega prestamo de forma (%d/%m/%y) :  ')
+    entregaPrestamo = datetime.datetime.strptime(entregaPrestamo, "%d/%m/%y")
+
+    equipo=Equipo.consulta(input('identificador del equipo que desea prestar: '))
+    equipo=''.join(equipo)
+    equipo=equipo.split(';')
+    equipo=':'.join(equipo)
+
+    prestamo = datetime.datetime.today().strptime('%d/%m/%y')
+
+    entregaPrestamo = datetime.datetime.strptime(entregaPrestamo, "%d/%m/%y")
+
+    validation=Equipo.consulta(nombre)
+
+    if validation[5]==validation[6]:
+
+        print('YA NO HAY MAS EQUIPOS DE ESTA REFERENCIA DISPONIBLES')
+        crearNuevoPrestamo()
+
+    else:
 
         e = Estudiante(nombre,carnet,prestamo,entregaPrestamo,equipo)
         e.save()
-
-
-    def consulPrestamo(self):
-
-
 

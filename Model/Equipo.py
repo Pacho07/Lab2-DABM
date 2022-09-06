@@ -4,7 +4,7 @@ import datetime
 
 class Equipo:
 
-    def __init__(self, nombre, referencia, proveedor, cicloMante, ultMante, cantidad):
+    def __init__(self, nombre, referencia, proveedor, cicloMante, ultMante, cantidad, cantPrestamo):
 
         self.nombre = nombre
         self.referencia = referencia
@@ -12,19 +12,20 @@ class Equipo:
         self.cicloMante = cicloMante
         self.ultMante = ultMante
         self.cantidad = cantidad
+        self.cantPrestamo=cantPrestamo
 
 
 
-    @staticmethod
+
     def verDatos(self):
-        header = ['nombre', 'referencia', 'proveedor', 'ciclo mantenimiento (dias)', 'ultimo mantenimiento', 'cantidad', 'necesidad de mantenimiento']
-        datos = [[self.nombre, self.referencia, self.proveedor, self.cicloMante, self.ultMante, self.cantidad]]
+        header = ['nombre', 'referencia', 'proveedor', 'ciclo mantenimiento (dias)', 'ultimo mantenimiento', 'cantidad', 'cantidad en Prestamo']
+        datos = [[self.nombre, self.referencia, self.proveedor, self.cicloMante, self.ultMante, self.cantidad,self.cantPrestamo]]
         print(tabulate(datos, header, tablefmt="grid"))
 
     @staticmethod
     def verDatosTodos():
-        header = ['nombre', 'referencia', 'proveedor', 'ciclo mantenimiento (dias)', 'ultimo mantenimiento', 'cantidad', 'necesidad de mantenimiento']
-        archivo = open("../BaseDatos/Equipos.txt", 'r')
+        header = ['nombre', 'referencia', 'proveedor', 'ciclo mantenimiento (dias)', 'ultimo mantenimiento', 'cantidad','cantidad en Prestamo']
+        archivo = open("BaseDatos/Equipos.txt", 'r')
         mantenimiento = archivo.readlines()
         mantenimiento = ''.join(x for x in mantenimiento if x not in '\n')
         mantenimiento = mantenimiento.split('\n')
@@ -46,15 +47,14 @@ class Equipo:
 
 
     def save(self):
-        archivo = open("../BaseDatos/Equipos.txt", 'a')
-        linea = ';'.join(
-            [self.nombre, self.referencia, self.proveedor, self.cicloMante, self.ultMante, self.cantidad])
+        archivo = open("BaseDatos/Equipos.txt", 'a')
+        linea = ';'.join([self.nombre, self.referencia, self.proveedor, str(self.cicloMante), self.ultMante, self.cantidad ,str(self.cantPrestamo)])
         archivo.write(linea + '\n')
         archivo.close()
 
     @staticmethod
     def consulta(nombre):
-        archivo = open("../BaseDatos/Equipos.txt", 'r')
+        archivo = open("BaseDatos/Equipos.txt", 'r')
         prestamos = archivo.readline()
         flag = 'falso'
         while (flag == 'falso'):
@@ -63,12 +63,12 @@ class Equipo:
             else:
                 prestamos = archivo.readline()
         prestamos = ''.join(x for x in prestamos if x not in '\n')
-        header = ['nombre', 'referencia', 'proveedor', 'ciclo mantenimiento', 'ultimo mantenimiento', 'cantidad']
+        header = ['nombre', 'referencia', 'proveedor', 'ciclo mantenimiento', 'ultimo mantenimiento', 'cantidad','cantidad prestada']
         datos = [list(prestamos.split(';'))]
 
         print(tabulate(datos, header, tablefmt="grid"))
 
-        return prestamos
+        return datos
         archivo.close()
 
     def eliminar(self, nombre):
@@ -82,14 +82,15 @@ class Equipo:
                 break
         buscando.pop(pos)
         archivo.close()
-        archivo = open("../BaseDatos/Equipos.txt", 'w')
+        archivo = open("BaseDatos/Equipos.txt", 'w')
 
         archivo.write(''.join(buscando))
         archivo.close()
 
-    def modificar(self, nombre):
+    @staticmethod
+    def modificar(nombre):
 
-        archivo = open("../BaseDatos/Equipos.txt", 'r')
+        archivo = open("BaseDatos/Equipos.txt", 'r')
         buscando = archivo.readlines()
         pos = 0
 
@@ -101,13 +102,14 @@ class Equipo:
         referencia = input('ingrese la referencia')
         proveedor = input('ingrese el proveedor')
         cicloMante = input('ingrese el ciclo mantenimiento')
-        ultMante = input('ingrese el ultimo mantenimiento')
+        ultMante = input('ingrese el ultimo mantenimiento (%d/%m/%y)')
         cantidad = input('ingrese la cantidad')
+        cantPrestamo=input('ingrese la cantidad en prestamo')
 
-        linea = ';'.join([nombre, referencia, proveedor, cicloMante, ultMante, cantidad + '\n'])
+        linea = ';'.join([nombre, referencia, proveedor, cicloMante, ultMante, cantidad,cantPrestamo, '\n'])
         archivo.close()
         buscando[pos] = linea
-        archivo = open("../BaseDatos/Equipos.txt", 'w')
+        archivo = open("BaseDatos/Equipos.txt", 'w')
 
         archivo.write(''.join(buscando))
         archivo.close()
@@ -124,10 +126,11 @@ class Equipo:
         ultimoMan = input('ultimo mantenimiento de forma (%d/%m/%y) : ')
         cantidad = input('cantidad: ')
 
-        ultimoMan = datetime.datetime.strptime(ultimoMan, "%d/%m/%y")
+
+        cantPrestamo=0
 
 
-        e = Equipo(nombre, proveedor, referencia, cicloMan, ultimoMan, cantidad)
+        e = Equipo(nombre, proveedor, referencia, cicloMan, ultimoMan, cantidad, cantPrestamo)
         e.save()
 
         return e

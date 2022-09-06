@@ -1,5 +1,5 @@
-william;suputa;sumasputa;5;02/02/02;22
-william;suputa;sumasputa;5;02/02/02;22
-william;suputa;sumasputa;5;02/02/02;22
-william;suputa;sumasputa;5;02/02/02;22
-william;canson;sumasputa;5;05/09/22;22
+william;1234;afdsa;2;06/09/22;22;1;
+william;suputa;sumasputa;5;02/02/02;22;1
+william;suputa;sumasputa;5;02/02/02;22;0
+william;suputa;sumasputa;5;02/02/02;22;1
+william;ajsdf;1234;2;02/02/03;22;0
