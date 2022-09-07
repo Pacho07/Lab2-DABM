@@ -1,34 +1,29 @@
-import switch as switch
 
-import Model.Equipo
-from Model.Equipo import *
-from Model.Estudiante import Estudiante
-import datetime
 from Model.Tecnico import *
+from Model.Equipo import *
 
-from Model.menu import *
+
+
 
 
 
 
 class menu:
 
-    def __init__ (self, laboratorio) :
-        self.laboratorio = laboratorio
+    @staticmethod
+    def ver():
 
-
-    def ver(self):
         print('''
           BIENVENIDO AL SISTEMA
           '''.center(50, '*'))
 
-        print('laboratorio: ' + self.laboratorio)
         print('1.Tecnicos')
         print('2.Estudiantes')
         print('3.salir')
 
         op = input('>>>')
         return int(op)
+
 
     @staticmethod
     def menuTecnicover():
@@ -47,6 +42,8 @@ class menu:
 
         op = int(input('>>>'))
 
+
+
         if op==1:
             Equipo.crear()
             menu.menuTecnicover()
@@ -58,7 +55,7 @@ class menu:
             menu.menuTecnicover()
 
         elif op==4:
-            Equipo.eliminar()
+            Equipo.eliminar(input('equipo que desea eliminar'))
             menu.menuTecnicover()
 
         elif op==5:
@@ -73,13 +70,16 @@ class menu:
             Tecnico.regisMante(input('ingrese identificador del equipo a realizar mantenimiento'))
             menu.menuTecnicover()
         elif op==8:
-            return
+            menu.ver()
+
         else:
             print('por favor poner una combinacion numerica correcta')
             menu.menuTecnicover()
 
+    @staticmethod
+    def menuEstudiantes():
 
-    def menuEstudiantes(self):
+
         print('''
                   MENU ESTUDIANTES
                   '''.center(28, '*'))
@@ -87,8 +87,14 @@ class menu:
         print('1.Hacer un nuevo prestamo')
         print('2.Consultar equipos prestados')
         print('3.ver todos los equipos ')
+        print('4.devolver prestamos')
+        print('5.volver')
 
 
-        op = input('>>>')
+        op = int(input('>>>'))
+
         return op
+
+
+
 

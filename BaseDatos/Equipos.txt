@@ -1,4 +1,4 @@
-william;1234;afdsa;2;06/09/22;22;1;
+william;1234;afdsa;2;06/09/22;23;0
 william;suputa;sumasputa;5;02/02/02;22;1
 william;suputa;sumasputa;5;02/02/02;22;0
 william;suputa;sumasputa;5;02/02/02;22;1
